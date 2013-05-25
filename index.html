@@ -10,36 +10,10 @@
 	<title>Morfeo</title>
 </head>
 <body>
-<section data-role="page" id="home">
-	<header data-theme="b" data-role="header">
-		<h1>Morfeo</h1>
-	</header>
-	<div data-role="content">
-		<form>
-			<input type="text" name="titulo" placeholder="Titulo del sueño" />
-			<textarea name="sueno" placeholder="Sueño"></textarea>
-			<input type="text" name="etiquetas" placeholder="Etiquetas" />
-			<label for="publico" class="ui-hidden-accessible">¿Sueño publico o privado?:</label>
-			<select id="publico" name="plubico" data-role="slider">
-	    		<option value="publico">Privado</option>
-	    		<option value="privado">Publico</option>
-			</select>
-			<input value="Enviar" type="submit">
-		</form>
-	</div>
-	<footer date-role="footer" data-position="fixed" data-theme="b">
-		<div data-role="navbar">
-			<ul>
-				<li><a data-icon="plus" class="ui-btn-active" href="#home">Nuevo</a></li>
-				<li><a data-icon="star" href="#misSuenos">Mis sueños</a></li>
-				<li><a data-icon="search" href="#busqueda">Sueños relacionados</a></li>
-			</ul>
-		</div>
-	</footer>
-</section>
 <section data-role="page" id="busqueda">
 	<header data-role="header" data-theme="b">
 		<h1>Morfeo</h1>
+		<a href="#nuevo" data-icon="plus" class="ui-btn-right">Nuevo</a>
 	</header>
 	<input type="search" name="password" id="search" value="" placeholder="Busca etiquetas...">
 	<div data-role="content">
@@ -61,9 +35,34 @@
 	<footer date-role="footer" data-position="fixed" data-theme="b">
 		<div data-role="navbar">
 			<ul>
-				<li><a data-icon="plus" href="#home">Nuevo</a></li>
+				<li><a data-icon="search" class="ui-btn-active" href="#busqueda">Sueños</a></li>
 				<li><a data-icon="star" href="#misSuenos">Mis sueños</a></li>
-				<li><a data-icon="search" class="ui-btn-active" href="#busqueda">Sueños relacionados</a></li>
+			</ul>
+		</div>
+	</footer>
+</section>
+<section data-role="page" id="nuevo">
+	<header data-theme="b" data-role="header">
+		<h1>Morfeo</h1>
+		<a href="#nuevo" data-icon="plus" class="ui-btn-right">Nuevo</a>
+	</header>
+	<div data-role="content">
+		<form>
+			<textarea name="sueno" placeholder="Sueño"></textarea>
+			<input type="text" name="etiquetas" placeholder="Etiquetas" />
+			<label for="publico" class="ui-hidden-accessible">¿Sueño publico o privado?:</label>
+			<select id="publico" name="plubico" data-role="slider">
+	    		<option value="publico">Privado</option>
+	    		<option value="privado">Publico</option>
+			</select>
+			<input value="Enviar" type="submit">
+		</form>
+	</div>
+	<footer date-role="footer" data-position="fixed" data-theme="b">
+		<div data-role="navbar">
+			<ul>
+				<li><a data-icon="search" href="#busqueda">Sueños</a></li>
+				<li><a data-icon="star" href="#misSuenos">Mis sueños</a></li>
 			</ul>
 		</div>
 	</footer>
@@ -71,6 +70,7 @@
 <section data-role="page" id="misSuenos">
 	<header data-role="header" data-theme="b">
 		<h1>Morfeo</h1>
+		<a href="#nuevo" data-icon="plus" class="ui-btn-right">Nuevo</a>
 	</header>
 	<div data-role="content">
 		<ul data-role="listview">
@@ -91,9 +91,8 @@
 	<footer date-role="footer" data-position="fixed" data-theme="b">
 		<div data-role="navbar">
 			<ul>
-				<li><a data-icon="plus" href="#home">Nuevo</a></li>
+				<li><a data-icon="search" href="#busqueda">Sueños</a></li>
 				<li><a data-icon="star" class="ui-btn-active" href="#misSuenos">Mis sueños</a></li>
-				<li><a data-icon="search" href="#busqueda">Sueños relacionados</a></li>
 			</ul>
 		</div>
 	</footer>
