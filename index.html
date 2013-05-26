@@ -6,59 +6,101 @@
 	<script type="text/javascript" src="jquery-2.0.1.min.js"></script>
 	<script type="text/javascript" src="jquery.mobile-1.3.1.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="jquery.mobile-1.3.1.min.css" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="themes/morfeo.min.css" />
+	<link href='http://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="styles.css" />
+	<script type="text/javascript">
+		$(document).on("pagebeforeshow", "#nuevo", function( event ){
+
+			$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+
+			$.getJSON("http://morfeo.herokuapp.com/phrase/random.json", function(data){
+				$("#phrase-random").html(data.contenido);
+			});
+
+			$.mobile.loading( 'hide' );
+
+		});
+
+		$(document).on("pageshow", function(){
+			$("#dream-send-btn").click( function(){
+				$.post("http://morfeo.herokuapp.com/posts/", $("#send-dream").serialize(), function(data){
+					console.log(data);
+				});
+				return false;
+			});
+
+			$("#registro-btn").click( function(){
+				/*$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){
+						console.log(data);
+				});
+				return false;*/
+			});
+
+		});
+	</script>
 	<title>Morfeo</title>
 </head>
 <body>
-<section data-role="page" id="busqueda">
-	<header data-role="header" data-theme="b">
-		<h1>Morfeo</h1>
-		<a href="#nuevo" data-icon="plus" class="ui-btn-right">Nuevo</a>
-	</header>
-	<input type="search" name="password" id="search" value="" placeholder="Busca etiquetas...">
-	<div data-role="content">
-		<ul data-role="listview">
-			<li>
-				<h1>Sueño 1</h1>
-				<p>Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
-			</li>
-			<li>
-				<h1>Sueño 2</h1>
-				<p>Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
-			</li>
-			<li>
-				<h1>Sueño 3</h1>
-				<p>Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
-			</li>
-		</ul>
-	</div>
-	<footer date-role="footer" data-position="fixed" data-theme="b">
-		<div data-role="navbar">
-			<ul>
-				<li><a data-icon="search" class="ui-btn-active" href="#busqueda">Sueños</a></li>
-				<li><a data-icon="star" href="#misSuenos">Mis sueños</a></li>
-			</ul>
+<section data-role="page" id="login">
+	<div data-role="content" id="login-content">
+		<img src="img/nube1.png" id="nube-2" />
+		<img src="img/nube2.png" id="nube-1" />
+		<img  src="img/sheep.png" id="oveja" />
+		<a href="#registro" id="login-link"><img id="twitter-btn" src="img/buenos_dias.png"></a>
+		<div id="pasto">
 		</div>
-	</footer>
+	</div>
 </section>
-<section data-role="page" id="nuevo">
-	<header data-theme="b" data-role="header">
-		<h1>Morfeo</h1>
-		<a href="#nuevo" data-icon="plus" class="ui-btn-right">Nuevo</a>
+<section data-role="page" id="registro">
+	<header data-theme="a" data-role="header" data-position="fixed">
+		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
+		<a href="#nuevo" data-theme="a" data-icon="plus" id="registro-btn" class="ui-btn-right">Registrarse</a>
 	</header>
-	<div data-role="content">
-		<form>
-			<textarea name="sueno" placeholder="Sueño"></textarea>
-			<input type="text" name="etiquetas" placeholder="Etiquetas" />
-			<label for="publico" class="ui-hidden-accessible">¿Sueño publico o privado?:</label>
-			<select id="publico" name="plubico" data-role="slider">
-	    		<option value="publico">Privado</option>
-	    		<option value="privado">Publico</option>
-			</select>
-			<input value="Enviar" type="submit">
+	<div data-role="content" data-theme="a">
+		<form id="resgistro-form">
+			<label for="usuario">Usuario:</label>
+			<input name="user[profile_name]" id="usuario" value="" type="text">
+			<label for="correo">Correo:</label>
+			<input name="user[email]" id="correo" value="" type="text">
+			<label for="password">Password:</label>
+			<input name="user[password]" id="password" value="" type="password">
+			<label for="repassword">Confirma la contraseña:</label>
+			<input name="user[password_confirmation]" id="repassword" value="" type="password">
 		</form>
 	</div>
-	<footer date-role="footer" data-position="fixed" data-theme="b">
+</section>
+<section data-role="page" id="nuevo">
+	<header data-theme="a" data-role="header" data-position="fixed">
+		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
+		<a href="#nuevo" data-theme="a" data-icon="plus" id="dream-send-btn" class="ui-btn-right">Enviar</a>
+	</header>
+	<div data-role="content" data-theme="a">
+		<form id="send-dream">
+			<textarea name="post[contenido]" placeholder="Sueño"></textarea>
+			<input type="text" name="tag_field" placeholder="Etiquetas" />
+			<label for="publico" class="ui-hidden-accessible">¿Sueño publico, privado o anonimo?:</label>
+			<fieldset data-role="controlgroup">
+				<input name="privacidad" id="privado" value="1" type="radio">
+	       		<label for="privado">Privado</label>
+				<input name="privacidad" id="publico" value="2" type="radio">
+	       		<label for="publico">Publico</label>
+				<input name="privacidad" id="anonimo" value="3" checked="checked" type="radio">
+	       		<label for="anonimo">Anonimo</label>
+       		</fieldset>
+		</form>
+		<div class="ui-grid-solo">
+			<div id="phrase-container" class="ui-block-a">
+				<p id="phrase-random"></p>
+			</div>
+		</div>
+	</div>
+	<footer date-role="footer" data-position="fixed" data-theme="a">
 		<div data-role="navbar">
 			<ul>
 				<li><a data-icon="search" href="#busqueda">Sueños</a></li>
@@ -67,29 +109,54 @@
 		</div>
 	</footer>
 </section>
-<section data-role="page" id="misSuenos">
-	<header data-role="header" data-theme="b">
-		<h1>Morfeo</h1>
-		<a href="#nuevo" data-icon="plus" class="ui-btn-right">Nuevo</a>
+<section data-role="page" id="busqueda">
+	<header data-role="header" data-theme="a" data-position="fixed">
+		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
+		<a href="#nuevo" data-theme="a" data-icon="plus" class="ui-btn-right">Nuevo</a>
 	</header>
-	<div data-role="content">
-		<ul data-role="listview">
+	<input type="search" name="password" id="search" value="" placeholder="Busca etiquetas...">
+	<div data-role="content" data-theme="a">
+		<ul data-role="listview" data-theme="a">
 			<li>
-				<h1>Mi Sueño 1</h1>
-				<p style="white-space:normal">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
+				<p class="dream-list-element">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
 			</li>
 			<li>
-				<h1>Mi ueño 2</h1>
-				<p style="white-space:normal">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
+				<p class="dream-list-element">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
 			</li>
 			<li>
-				<h1>Mi Sueño 3</h1>
-				<p style="white-space:normal">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
+				<p class="dream-list-element">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
 			</li>
 		</ul>
 	</div>
-	<footer date-role="footer" data-position="fixed" data-theme="b">
-		<div data-role="navbar">
+	<footer date-role="footer" data-position="fixed" data-theme="a">
+		<div data-role="navbar" data-theme="a">
+			<ul>
+				<li><a data-icon="search" class="ui-btn-active" href="#busqueda">Sueños</a></li>
+				<li><a data-icon="star" href="#misSuenos">Mis sueños</a></li>
+			</ul>
+		</div>
+	</footer>
+</section>
+<section data-role="page" data-theme="a" id="misSuenos">
+	<header data-role="header" data-theme="a" data-position="fixed">
+		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
+		<a href="#nuevo" data-theme="a" data-icon="plus" class="ui-btn-right">Nuevo</a>
+	</header>
+	<div data-role="content" data-theme="a">
+		<ul data-role="listview" data-theme="a">
+			<li>
+				<p class="dream-list-element">Estaba en mi colonia, estrañamente habia obtenido una certificacion para volar, era sencillo volar, tenia una espacie de playera especial con dos alas que movia a voluntad, recuerdo el vertigo al iniciar el vuelo, tambien tenia que tener cuidado de los cables de luz por que siempre me enredaba en ellos.</p>
+			</li>
+			<li>
+				<p class="dream-list-element">Soñe que estaba en una nave extatrerrestre con mi mejor amigo, estabamos tratando de detener la nave, logramos estrellarla en la glorita del hotel camino real, de ahi tuvimos que ir a pie, ibamos armados luchando con la invacion extraterrestre, en la luna se veia reflejada la tierra y en ese reflejo se veia como una gran ola avanzaba hacia la tierra.</p>
+			</li>
+			<li>
+				<p class="dream-list-element">Despertaba en casa de mi mejor amigo, en la calle no habia nadie, derrepente un grupo de gente empezaba a caminar hacia la esquina de mi cuadra, iban caminado como zombies, al acercarme a pedir una explicacion de lo que estaba pasando se comportaban de manera violenta y soltaban golpes.</p>
+			</li>
+		</ul>
+	</div>
+	<footer date-role="footer" data-position="fixed" data-theme="z">
+		<div data-role="navbar" data-theme="a">
 			<ul>
 				<li><a data-icon="search" href="#busqueda">Sueños</a></li>
 				<li><a data-icon="star" class="ui-btn-active" href="#misSuenos">Mis sueños</a></li>

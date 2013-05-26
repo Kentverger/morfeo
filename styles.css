@@ -1,9 +1,83 @@
 #sueno-text {
 	height: 100%;
 }
-a{
-	white-space: normal;
+.dream-list-element {
+	padding: 15px;
+	font-size: 1.1em;
 }
 p {
-	white-space: normal;
+	white-space: normal !important;
+}
+a {
+	white-space: normal !important;
+}
+textarea {
+	height: 100% !important;
+}
+#login, #login-content{
+    background-color: #17D1E5;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+#oveja{
+    bottom: 9px;
+    position: absolute;
+    width: 58%;
+}
+#pasto{
+    background-image: url("img/pasto.png");
+    background-repeat: repeat-x;
+    bottom: 0;
+    height: 87px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+#nube-1{
+    left: -71px;
+    position: absolute;
+    width: 88%;
+}
+#nube-2{
+    position: absolute;
+    right: -103px;
+    top: 28px;
+    width: 100%;;
+}
+#twitter-btn{
+	width: 83%;
+}
+#login-link{
+    position: absolute;
+    text-align: center;
+    top: 230px;
+    width: 100%;
+}
+#phrase-container{
+	background-image: url(img/pasto1.png);
+	background-repeat: repeat-x;
+	display: block;
+	min-height: 155px;
+}
+#phrase-random{
+    color: #FFF200;
+    display: block;
+    font-family: 'Luckiest Guy',cursive;
+    font-size: 1.3em;
+    margin: 0 auto;
+    min-height: 155px;
+    padding-top: 25px;
+    text-align: center;
+    text-shadow: 3px 3px 4px #979696;
+    vertical-align: bottom;
+    width: 80%;
+}
+#phrase-random p{
+	height: 100%;
+	width: 100%;
+}
+h1 img {
+	width: 90px;
 }
