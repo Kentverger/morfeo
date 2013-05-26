@@ -10,39 +10,61 @@
 	<link href='http://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="styles.css" />
 	<script type="text/javascript">
+		var user_name = "";
 		$(document).on("pagebeforeshow", "#nuevo", function( event ){
 
-			$.mobile.loading( 'show', {
-				text: 'Cargando...',
-				textVisible: true,
-				theme: 'a',
-				html: ""
-			});
-
-			$.getJSON("http://morfeo.herokuapp.com/phrase/random.json", function(data){
+			$.getJSON("http://morfeo2.herokuapp.com/phrase/random.json", function(data){
 				$("#phrase-random").html(data.contenido);
 			});
 
-			$.mobile.loading( 'hide' );
-
-		});
-
-		$(document).on("pageshow", function(){
 			$("#dream-send-btn").click( function(){
-				$.post("http://morfeo.herokuapp.com/posts/", $("#send-dream").serialize(), function(data){
+				$("#user_name").val(user_name);
+				$.post("http://morfeo2.herokuapp.com/posts/", $("#send-dream").serialize(), function(data){
 					console.log(data);
 				});
-				return false;
-			});
-
-			$("#registro-btn").click( function(){
-				/*$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){
-						console.log(data);
-				});
-				return false;*/
 			});
 
 		});
+
+		$(document).on("pagebeforeshow", "#misSuenos", function( event ){
+			$.post("http://morfeo2.herokuapp.com/posts/publico/user.json/", function(data){
+				$("#listado-mis-suenos").empty();
+				for(x in data){
+					li = $("<li></li>");
+					p = $('<p class="dream-list-element"></p>');
+					p.html(data[x].contenido);
+					li.append(p);
+					$("#listado-mis-suenos").append(li)
+				}
+				$("#listado-mis-suenos").listview('refresh');
+
+			});
+		});
+
+
+		$(document).on("pagebeforeshow", "#busqueda", function( event ){
+			$("#do-search").click(function(){
+				$("#resultados-busqueda").empty();
+				$.post("http://morfeo2.herokuapp.com/posts/"+$("#search").val()+"/tag.json", function(data){
+					for(x in data){
+						li = $("<li></li>");
+						p = $('<p class="dream-list-element"></p>');
+						p.html(data[x].post.contenido);
+						li.append(p);
+						$("#resultados-busqueda").append(li)
+					}
+					$("#resultados-busqueda").listview('refresh');
+				});
+			});
+		});
+		$(document).on("pagebeforeshow", "#registro", function(){
+			$("#registro-btn").click(function(){
+				$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){
+						user_name = $("#usuario").val();
+				});
+			});
+		});
+
 	</script>
 	<title>Morfeo</title>
 </head>
@@ -78,12 +100,13 @@
 <section data-role="page" id="nuevo">
 	<header data-theme="a" data-role="header" data-position="fixed">
 		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
-		<a href="#nuevo" data-theme="a" data-icon="plus" id="dream-send-btn" class="ui-btn-right">Enviar</a>
+		<a href="#misSuenos" data-theme="a" data-icon="plus" id="dream-send-btn" class="ui-btn-right">Enviar</a>
 	</header>
 	<div data-role="content" data-theme="a">
 		<form id="send-dream">
 			<textarea name="post[contenido]" placeholder="Sueño"></textarea>
 			<input type="text" name="tag_field" placeholder="Etiquetas" />
+			<input type="hidden" id="profile_name" name="post[ip]" value="publico" />
 			<label for="publico" class="ui-hidden-accessible">¿Sueño publico, privado o anonimo?:</label>
 			<fieldset data-role="controlgroup">
 				<input name="privacidad" id="privado" value="1" type="radio">
@@ -114,18 +137,14 @@
 		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
 		<a href="#nuevo" data-theme="a" data-icon="plus" class="ui-btn-right">Nuevo</a>
 	</header>
-	<input type="search" name="password" id="search" value="" placeholder="Busca etiquetas...">
 	<div data-role="content" data-theme="a">
-		<ul data-role="listview" data-theme="a">
-			<li>
-				<p class="dream-list-element">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
-			</li>
-			<li>
-				<p class="dream-list-element">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
-			</li>
-			<li>
-				<p class="dream-list-element">Contenido del Sueño 1 puro contenido no se que poner porque hay que llenar esto y asi bien padres :3</p>
-			</li>
+		<div class="ui-grid-solo">
+			<div class="ui-block-a">
+				<input type="search" name="tag" id="search" value="" placeholder="Busca etiquetas...">
+				<a data-role="button" href="#" data-icon="search" data-inline="true" id="do-search">Buscar</a>
+			</div>
+		</div>
+		<ul data-role="listview" id="resultados-busqueda" data-theme="a">
 		</ul>
 	</div>
 	<footer date-role="footer" data-position="fixed" data-theme="a">
@@ -143,16 +162,7 @@
 		<a href="#nuevo" data-theme="a" data-icon="plus" class="ui-btn-right">Nuevo</a>
 	</header>
 	<div data-role="content" data-theme="a">
-		<ul data-role="listview" data-theme="a">
-			<li>
-				<p class="dream-list-element">Estaba en mi colonia, estrañamente habia obtenido una certificacion para volar, era sencillo volar, tenia una espacie de playera especial con dos alas que movia a voluntad, recuerdo el vertigo al iniciar el vuelo, tambien tenia que tener cuidado de los cables de luz por que siempre me enredaba en ellos.</p>
-			</li>
-			<li>
-				<p class="dream-list-element">Soñe que estaba en una nave extatrerrestre con mi mejor amigo, estabamos tratando de detener la nave, logramos estrellarla en la glorita del hotel camino real, de ahi tuvimos que ir a pie, ibamos armados luchando con la invacion extraterrestre, en la luna se veia reflejada la tierra y en ese reflejo se veia como una gran ola avanzaba hacia la tierra.</p>
-			</li>
-			<li>
-				<p class="dream-list-element">Despertaba en casa de mi mejor amigo, en la calle no habia nadie, derrepente un grupo de gente empezaba a caminar hacia la esquina de mi cuadra, iban caminado como zombies, al acercarme a pedir una explicacion de lo que estaba pasando se comportaban de manera violenta y soltaban golpes.</p>
-			</li>
+		<ul data-role="listview" id="listado-mis-suenos" data-theme="a">
 		</ul>
 	</div>
 	<footer date-role="footer" data-position="fixed" data-theme="z">
