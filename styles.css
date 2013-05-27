@@ -24,7 +24,7 @@ textarea {
 #oveja{
     bottom: 9px;
     position: absolute;
-    width: 58%;
+    width: 208px;
 }
 #pasto{
     background-image: url("img/pasto.png");
@@ -38,16 +38,16 @@ textarea {
 #nube-1{
     left: -71px;
     position: absolute;
-    width: 88%;
+    width: 265px;
 }
 #nube-2{
     position: absolute;
     right: -103px;
     top: 28px;
-    width: 100%;;
+    width: 354px;
 }
 #twitter-btn{
-	width: 83%;
+	width: 295px;
 }
 #login-link{
     position: absolute;

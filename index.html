@@ -82,7 +82,6 @@
 <section data-role="page" id="registro">
 	<header data-theme="a" data-role="header" data-position="fixed">
 		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
-		<a href="#nuevo" data-theme="a" data-icon="plus" id="registro-btn" class="ui-btn-right">Registrarse</a>
 	</header>
 	<div data-role="content" data-theme="a">
 		<form id="resgistro-form">
@@ -94,13 +93,13 @@
 			<input name="user[password]" id="password" value="" type="password">
 			<label for="repassword">Confirma la contraseña:</label>
 			<input name="user[password_confirmation]" id="repassword" value="" type="password">
+			<a href="#nuevo" data-theme="a" data-icon="plus" data-role="button" id="registro-btn">Registrarse</a>
 		</form>
 	</div>
 </section>
 <section data-role="page" id="nuevo">
 	<header data-theme="a" data-role="header" data-position="fixed">
 		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
-		<a href="#misSuenos" data-theme="a" data-icon="plus" id="dream-send-btn" class="ui-btn-right">Enviar</a>
 	</header>
 	<div data-role="content" data-theme="a">
 		<form id="send-dream">
@@ -116,6 +115,7 @@
 				<input name="privacidad" id="anonimo" value="3" checked="checked" type="radio">
 	       		<label for="anonimo">Anonimo</label>
        		</fieldset>
+       		<a href="#misSuenos" data-theme="a" data-icon="plus" id="dream-send-btn" data-role="button">Enviar</a>
 		</form>
 		<div class="ui-grid-solo">
 			<div id="phrase-container" class="ui-block-a">
