@@ -10,90 +10,91 @@
 	<link href='http://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="styles.css" />
 	<script type="text/javascript">
-		$(document).on("pagebeforeshow", "#nuevo", function( event ){
+		$(document).on('pageinit', function(){ 
+			$("#nuevo").on("pageinit", function( event ){
 
-			$.getJSON("http://morfeo2.herokuapp.com/phrase/random.json", function(data){
-				$("#phrase-random").html(data.contenido);
-			});
-
-			$("#dream-send-btn").click( function(){
-				$("#user_name").val(user_name);
-				$.post("http://morfeo2.herokuapp.com/posts/", $("#send-dream").serialize(), function(data){
-					console.log(data);
+				$.getJSON("http://morfeo2.herokuapp.com/phrase/random.json", function(data){
+					$("#phrase-random").html(data.contenido);
 				});
-			});
 
-		});
-
-		$(document).on("pagebeforeshow", "#misSuenos", function( event ){
-			$.post("http://morfeo2.herokuapp.com/posts/publico/user.json/", function(data){
-				$("#listado-mis-suenos").empty();
-				for(x in data){
-					li = $("<li></li>");
-					p = $('<p class="dream-list-element"></p>');
-					p.html(data[x].contenido);
-					li.append(p);
-					$("#listado-mis-suenos").append(li)
-				}
-				$("#listado-mis-suenos").listview('refresh');
+				$("#dream-send-btn").click( function(){
+					$("#user_name").val(user_name);
+					$.post("http://morfeo2.herokuapp.com/posts/", $("#send-dream").serialize(), function(data){
+						console.log(data);
+					});
+				});
 
 			});
-		});
 
-
-		$(document).on("pagebeforeshow", "#busqueda", function( event ){
-			$("#do-search").click(function(){
-				$("#resultados-busqueda").empty();
-				$.post("http://morfeo2.herokuapp.com/posts/"+$("#search").val()+"/tag.json", function(data){
+			$("#misSuenos").on("pageinit", function( event ){
+				$.post("http://morfeo2.herokuapp.com/posts/publico/user.json/", function(data){
+					$("#listado-mis-suenos").empty();
 					for(x in data){
 						li = $("<li></li>");
 						p = $('<p class="dream-list-element"></p>');
-						p.html(data[x].post.contenido);
+						p.html(data[x].contenido);
 						li.append(p);
-						$("#resultados-busqueda").append(li)
+						$("#listado-mis-suenos").append(li)
 					}
-					$("#resultados-busqueda").listview('refresh');
+					$("#listado-mis-suenos").listview('refresh');
+
+				});
+			});
+
+
+			$("#busqueda").on("pageinit", function( event ){
+				$("#do-search").click(function(){
+					$("#resultados-busqueda").empty();
+					$.post("http://morfeo2.herokuapp.com/posts/"+$("#search").val()+"/tag.json", function(data){
+						for(x in data){
+							li = $("<li></li>");
+							p = $('<p class="dream-list-element"></p>');
+							p.html(data[x].post.contenido);
+							li.append(p);
+							$("#resultados-busqueda").append(li)
+						}
+						$("#resultados-busqueda").listview('refresh');
+					});
+				});
+			});
+			$("#registro").on("pageinit", function(){
+				$("#registro-btn").click(function(){
+
+					errores = "";
+
+					//Variables para la validacion
+					usuario = $("#usuario").val();
+					correo = $("#correo").val();
+					password = $("#password").val();
+					repassword = $("#repassword").val();
+
+					if( usuario == "" ){
+						errores = errores + '<p class="error-message">El nombre de usuario no puede estar vació.</p>';
+					}
+					if( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3,4})+$/.test(correo) ){
+						errores = errores + '<p class="error-message">El correo tiene que ser valido.</p>';
+					}
+					if( password == "" ){
+						errores = errores + '<p class="error-message">Tienes que escribir un password.</p>';
+					}
+					if( repassword == password ){
+						errores = errores + '<p class="error-message">Las contraseñas deben de coincidir.</p>';
+					}
+					if( errores != "" ){
+
+						$("#errores-container").html(errores);
+
+						$.mobile.changePage('#reg-errors');
+
+					}else{
+
+						$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){});
+
+					}
+
 				});
 			});
 		});
-		$(document).on("pagebeforeshow", "#registro", function(){
-			$("#registro-btn").click(function(){
-
-				errores = "";
-
-				//Variables para la validacion
-				usuario = $("#usuario").val();
-				correo = $("#correo").val();
-				password = $("#password").val();
-				repassword = $("#repassword").val();
-
-				if( usuario == "" ){
-					errores = errores + '<p class="error-message">El nombre de usuario no puede estar vació.</p>';
-				}
-				if( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3,4})+$/.test(correo) ){
-					errores = errores + '<p class="error-message">El correo tiene que ser valido.</p>';
-				}
-				if( password == "" ){
-					errores = errores + '<p class="error-message">Tienes que escribir un password.</p>';
-				}
-				if( repassword == password ){
-					errores = errores + '<p class="error-message">Las contraseñas deben de coincidir.</p>';
-				}
-				if( errores != "" ){
-
-					$("#errores-container").html(errores);
-
-					$.mobile.changePage('#reg-errors');
-
-				}else{
-
-					$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){});
-
-				}
-
-			});
-		});
-
 	</script>
 	<title>Morfeo</title>
 </head>
