@@ -10,7 +10,6 @@
 	<link href='http://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="styles.css" />
 	<script type="text/javascript">
-		var user_name = "";
 		$(document).on("pagebeforeshow", "#nuevo", function( event ){
 
 			$.getJSON("http://morfeo2.herokuapp.com/phrase/random.json", function(data){
@@ -59,9 +58,39 @@
 		});
 		$(document).on("pagebeforeshow", "#registro", function(){
 			$("#registro-btn").click(function(){
-				$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){
-						user_name = $("#usuario").val();
-				});
+
+				errores = "";
+
+				//Variables para la validacion
+				usuario = $("#usuario").val();
+				correo = $("#correo").val();
+				password = $("#password").val();
+				repassword = $("#repassword").val();
+
+				if( usuario == "" ){
+					errores = errores + '<p class="error-message">El nombre de usuario no puede estar vació.</p>';
+				}
+				if( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3,4})+$/.test(correo) ){
+					errores = errores + '<p class="error-message">El correo tiene que ser valido.</p>';
+				}
+				if( password == "" ){
+					errores = errores + '<p class="error-message">Tienes que escribir un password.</p>';
+				}
+				if( repassword == password ){
+					errores = errores + '<p class="error-message">Las contraseñas deben de coincidir.</p>';
+				}
+				if( errores != "" ){
+
+					$("#errores-container").html(errores);
+
+					$.mobile.changePage('#reg-errors');
+
+				}else{
+
+					$.post("http://morfeo.herokuapp.com/users/", $("#resgistro-form").serialize(), function(data){});
+
+				}
+
 			});
 		});
 
@@ -84,6 +113,7 @@
 		<h1 data-theme="a"><img src="img/morfeo.png" /></h1>
 	</header>
 	<div data-role="content" data-theme="a">
+		<a id='lnkDialog' href="#dialog" data-rel="dialog" data-transition="pop" style='display:none;'></a>
 		<form id="resgistro-form">
 			<label for="usuario">Usuario:</label>
 			<input name="user[profile_name]" id="usuario" value="" type="text">
@@ -93,7 +123,7 @@
 			<input name="user[password]" id="password" value="" type="password">
 			<label for="repassword">Confirma la contraseña:</label>
 			<input name="user[password_confirmation]" id="repassword" value="" type="password">
-			<a href="#nuevo" data-theme="a" data-icon="plus" data-role="button" id="registro-btn">Registrarse</a>
+			<a href="#errores-container" data-theme="a" data-icon="plus" data-rel="dialog" data-role="button" id="registro-btn">Registrarse</a>
 		</form>
 	</div>
 </section>
@@ -173,6 +203,14 @@
 			</ul>
 		</div>
 	</footer>
+</section>
+<section id="reg-errors" data-role="dialog" data-theme="a">
+	<header data-role="header">
+		<h1>Errores en el registro</h1>
+	</header>
+	<div data-role="content" id="errores-container">
+		
+	</div>
 </section>
 </body>
 </html>
